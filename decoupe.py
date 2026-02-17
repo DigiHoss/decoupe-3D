@@ -12,7 +12,19 @@ def decoupe(facettes, epaisseur):
     le vecteur externe contient toutes les coupes de tranches de la plus basse (x minimal)
     a la plus haute (x maximal).
     """
-    pass
+    if not facettes:
+        return []
+    x_min = min(facette.x_min() for facette in facettes)
+    x_max = max(facette.x_max() for facette in facettes)
+    tranches = []
+    for x in multiples_entre(x_min, x_max, epaisseur):
+        segments_tranche = []
+        for facette in facettes:
+            segments_tranche.extend(facette.intersection_plan_vertical(x))
+        tranches.append(segments_tranche)
+    return tranches
+        
+        
 
 
 def main():
