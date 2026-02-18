@@ -14,14 +14,28 @@ def decoupe(facettes, epaisseur):
     """
     if not facettes:
         return []
-    x_min = min(facette.x_min() for facette in facettes)
-    x_max = max(facette.x_max() for facette in facettes)
+    z_min = min(f.zmin_et_zmax()[0] for f in facettes)
+    z_max = max(f.zmin_et_zmax()[1] for f in facettes)
+    hauteurs = multiples_entre(z_min, z_max, epaisseur)
+    print("z_min:", z_min, "z_max:", z_max)
+    print("hauteurs:", hauteurs)
     tranches = []
-    for x in multiples_entre(x_min, x_max, epaisseur):
+    for h in hauteurs:
         segments_tranche = []
-        for facette in facettes:
-            segments_tranche.extend(facette.intersection_plan_vertical(x))
-        tranches.append(segments_tranche)
+        #for f in facettes:
+            #seg = f.intersection_plan_horizontal(h)
+            #if seg:
+                #segments_tranche.append(seg[0])
+        #tranches.append(segments_tranche)
+
+        #On peut filtrer les facettes hors tranche pour éviter de calculer des intersections inutiles
+        for f in facettes:
+            zmin_f, zmax_f = f.zmin_et_zmax()
+            if h < zmin_f or h > zmax_f:
+                continue  # pas d'intersection possible
+            segments_tranche.extend(f.intersection_plan_horizontal(h))
+        tranches.append(list(segments_tranche))
+
     return tranches
         
         
