@@ -17,8 +17,6 @@ def decoupe(facettes, epaisseur):
     z_min = min(f.zmin_et_zmax()[0] for f in facettes)
     z_max = max(f.zmin_et_zmax()[1] for f in facettes)
     hauteurs = multiples_entre(z_min, z_max, epaisseur)
-    print("z_min:", z_min, "z_max:", z_max)
-    print("hauteurs:", hauteurs)
     tranches = []
     for h in hauteurs:
         segments_tranche = []
